@@ -1,0 +1,128 @@
+.recordatorios-filtros {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}
+
+.recordatorios-filtros button {
+  border: none;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  padding: var(--space-2) var(--space-4);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.recordatorios-filtros button + button {
+  border-left: 1px solid var(--color-border);
+}
+
+.recordatorios-filtros button.active {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.recordatorio-tipo {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.recordatorios-acciones {
+  display: flex;
+  gap: var(--space-3);
+  white-space: nowrap;
+}
+
+.recordatorios-acciones button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  color: var(--color-primary-dark);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.recordatorios-acciones button.danger {
+  color: var(--color-danger);
+}
+
+@media (max-width: 760px) {
+  .recordatorios-table thead {
+    display: none;
+  }
+
+  .recordatorios-table,
+  .recordatorios-table tbody,
+  .recordatorios-table tr,
+  .recordatorios-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .recordatorios-table tr {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .recordatorios-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .recordatorios-table td {
+    border-bottom: none;
+    padding: var(--space-1) 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    text-align: right;
+  }
+
+  .recordatorios-table td::before {
+    content: attr(data-label);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-align: left;
+  }
+
+  .recordatorios-table td.recordatorios-acciones {
+    justify-content: flex-end;
+  }
+
+  .recordatorios-table td.recordatorios-acciones::before {
+    content: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .recordatorios-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    border: none;
+    width: 100%;
+  }
+
+  .recordatorios-filtros button {
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    flex: 1;
+    min-width: 45%;
+  }
+
+  .recordatorios-filtros button + button {
+    border-left: 1px solid var(--color-border);
+  }
+
+  .recordatorios-filtros button.active {
+    border-color: var(--color-primary);
+  }
+}

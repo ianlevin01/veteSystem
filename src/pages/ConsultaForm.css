@@ -1,0 +1,135 @@
+.consulta-form-page {
+  max-width: 1080px;
+}
+
+.consulta-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.consulta-form-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .consulta-form-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.consulta-form-card {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+}
+
+.consulta-form-card h3 {
+  font-size: 15px;
+}
+
+.consulta-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+}
+
+.consulta-detalle-dl {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.consulta-detalle-dl dt {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+
+.consulta-detalle-dl dd {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.consulta-detalle-acciones {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.consulta-form-nota {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.consulta-ia-card {
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+  border-style: dashed;
+}
+
+.consulta-ia-card-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 220px;
+  color: var(--color-primary-dark);
+}
+
+.consulta-ia-card-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.consulta-ia-card-info strong {
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.consulta-ia-card-info span {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.consulta-detecciones-ia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .consulta-form-card {
+    padding: var(--space-4);
+  }
+
+  .consulta-ia-card {
+    padding: var(--space-4);
+  }
+
+  .consulta-ia-card .btn {
+    width: 100%;
+  }
+
+  .consulta-detalle-acciones {
+    flex-direction: column;
+  }
+
+  .consulta-detalle-acciones .btn {
+    width: 100%;
+  }
+}
