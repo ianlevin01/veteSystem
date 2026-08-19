@@ -9,6 +9,7 @@ import ConsultaItemsPicker from "../components/ConsultaItemsPicker.jsx";
 import AdjuntosConsulta from "../components/AdjuntosConsulta.jsx";
 import { IconArrowLeft, IconSyringe, IconTrash } from "../components/icons.jsx";
 import { formatDate, formatPlazo } from "../utils/format.js";
+import { getErrorMessage } from "../utils/errors.js";
 import "./ConsultaForm.css";
 
 function historiaAForm(historia) {
@@ -82,7 +83,7 @@ function ConsultaDetalle() {
       setItems(historiaAItems(actualizada));
       setModoEdicion(false);
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo guardar la consulta");
+      setError(getErrorMessage(err, "No se pudo guardar la consulta"));
     } finally {
       setIsSubmitting(false);
     }

@@ -8,6 +8,7 @@ import Button from "../components/Button.jsx";
 import FormError from "../components/FormError.jsx";
 import Select from "../components/Select.jsx";
 import { IconArrowLeft, IconSearch, IconCheck } from "../components/icons.jsx";
+import { getErrorMessage } from "../utils/errors.js";
 import "./NuevoPaciente.css";
 
 const ESPECIES = [
@@ -92,7 +93,7 @@ function NuevoPaciente() {
       const creado = await createPaciente(payload);
       navigate(`/pacientes/${creado.id}`, { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo crear el paciente");
+      setError(getErrorMessage(err, "No se pudo crear el paciente"));
     } finally {
       setIsSubmitting(false);
     }

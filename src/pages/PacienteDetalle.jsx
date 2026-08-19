@@ -4,6 +4,7 @@ import { getPaciente } from "../api/pacienteApi.js";
 import { listHistorias } from "../api/historiaClinicaApi.js";
 import { listAlertasPaciente, createAlertaPaciente, updateAlerta, deleteAlerta } from "../api/alertaApi.js";
 import { listRecordatoriosPaciente } from "../api/recordatorioApi.js";
+import { getErrorMessage } from "../utils/errors.js";
 import Card from "../components/Card.jsx";
 import Button from "../components/Button.jsx";
 import FormError from "../components/FormError.jsx";
@@ -32,7 +33,7 @@ function AlertasPaciente({ pacienteId, alertas, setAlertas }) {
       setAlertas((prev) => [creada, ...prev]);
       setNueva("");
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo agregar la alerta");
+      setError(getErrorMessage(err, "No se pudo agregar la alerta"));
     }
   }
 
@@ -42,7 +43,7 @@ function AlertasPaciente({ pacienteId, alertas, setAlertas }) {
       setAlertas((prev) => prev.map((a) => (a.id === id ? actualizada : a)));
       setEditandoId(null);
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo editar la alerta");
+      setError(getErrorMessage(err, "No se pudo editar la alerta"));
     }
   }
 

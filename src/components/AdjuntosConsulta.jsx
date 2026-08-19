@@ -3,6 +3,7 @@ import { listAdjuntos, subirAdjunto, getUrlDescargaAdjunto, deleteAdjunto } from
 import Button from "./Button.jsx";
 import FormError from "./FormError.jsx";
 import { IconPaperclip, IconUpload, IconTrash } from "./icons.jsx";
+import { getErrorMessage } from "../utils/errors.js";
 import "./AdjuntosConsulta.css";
 
 const TIPOS_PERMITIDOS = ["image/jpeg", "image/png", "image/webp", "image/gif", "application/pdf"];
@@ -45,7 +46,7 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
       const subido = await subirAdjunto(pacienteId, historiaId, file);
       setAdjuntos((prev) => [...prev, subido]);
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo subir el archivo");
+      setError(getErrorMessage(err, "No se pudo subir el archivo"));
     } finally {
       setIsUploading(false);
       event.target.value = "";

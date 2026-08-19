@@ -5,6 +5,7 @@ import AuthLayout from "../components/AuthLayout.jsx";
 import TextField from "../components/TextField.jsx";
 import Button from "../components/Button.jsx";
 import FormError from "../components/FormError.jsx";
+import { getErrorMessage } from "../utils/errors.js";
 
 function Login() {
   const { login } = useAuth();
@@ -21,7 +22,7 @@ function Login() {
       await login(form);
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo iniciar sesión");
+      setError(getErrorMessage(err, "No se pudo iniciar sesión"));
     } finally {
       setIsSubmitting(false);
     }

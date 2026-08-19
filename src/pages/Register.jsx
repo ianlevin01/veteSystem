@@ -5,6 +5,7 @@ import AuthLayout from "../components/AuthLayout.jsx";
 import TextField from "../components/TextField.jsx";
 import Button from "../components/Button.jsx";
 import FormError from "../components/FormError.jsx";
+import { getErrorMessage } from "../utils/errors.js";
 
 const initialForm = {
   veterinariaNombre: "",
@@ -36,7 +37,7 @@ function Register() {
       });
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo completar el registro");
+      setError(getErrorMessage(err, "No se pudo completar el registro"));
     } finally {
       setIsSubmitting(false);
     }

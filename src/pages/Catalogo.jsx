@@ -8,6 +8,7 @@ import Select from "../components/Select.jsx";
 import { IconPlus, IconInbox } from "../components/icons.jsx";
 import { formatPlazo } from "../utils/format.js";
 import { UNIDADES_PLAZO } from "../utils/recordatorioConstants.js";
+import { getErrorMessage } from "../utils/errors.js";
 import "./Catalogo.css";
 
 const TIPOS = [
@@ -71,7 +72,7 @@ function CatalogoSeccion({ tipo, label, items, onCreated, onUpdated }) {
       onCreated(creado);
       setAgregando(false);
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo crear el item");
+      setError(getErrorMessage(err, "No se pudo crear el item"));
     }
   }
 
@@ -82,7 +83,7 @@ function CatalogoSeccion({ tipo, label, items, onCreated, onUpdated }) {
       onUpdated(actualizado);
       setEditandoId(null);
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo actualizar el item");
+      setError(getErrorMessage(err, "No se pudo actualizar el item"));
     }
   }
 

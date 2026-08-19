@@ -10,6 +10,7 @@ import ConsultaItemsPicker from "../components/ConsultaItemsPicker.jsx";
 import DeteccionItemIA from "../components/DeteccionItemIA.jsx";
 import { IconArrowLeft, IconSparkle, IconUpload } from "../components/icons.jsx";
 import { todayIsoDate } from "../utils/format.js";
+import { getErrorMessage } from "../utils/errors.js";
 import "./ConsultaForm.css";
 
 const formInicial = {
@@ -70,7 +71,7 @@ function NuevaConsulta() {
       }));
       setDeteccionesPendientes(resultado.itemsDetectados || []);
     } catch (err) {
-      setErrorIA(err.response?.data?.error || "No se pudo analizar la imagen");
+      setErrorIA(getErrorMessage(err, "No se pudo analizar la imagen"));
     } finally {
       setIsAnalizando(false);
       event.target.value = "";
@@ -108,7 +109,7 @@ function NuevaConsulta() {
       const creada = await createHistoria(pacienteId, payload);
       navigate(`/pacientes/${pacienteId}/consultas/${creada.id}`, { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || "No se pudo guardar la consulta");
+      setError(getErrorMessage(err, "No se pudo guardar la consulta"));
     } finally {
       setIsSubmitting(false);
     }
