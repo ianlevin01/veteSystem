@@ -31,6 +31,20 @@
   box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
+.pacientes-row {
+  cursor: pointer;
+}
+
+.pacientes-row:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.pacientes-nombre {
+  color: var(--color-primary-dark);
+  font-weight: 600;
+}
+
 .especie-badge {
   display: inline-flex;
   font-size: 12px;

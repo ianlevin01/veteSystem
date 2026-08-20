@@ -69,25 +69,28 @@ function Navbar() {
       </button>
 
       {menuAbierto && (
-        <div className="navbar-mobile-menu">
-          <nav className="navbar-nav navbar-nav-mobile">
-            {NAV_ITEMS.map(({ to, end, label, icon: Icon }) => (
-              <NavLink key={to} to={to} end={end} className={navLinkClass} onClick={() => setMenuAbierto(false)}>
-                <Icon size={16} />
-                {label}
-              </NavLink>
-            ))}
-          </nav>
-          <div className="navbar-mobile-footer">
-            <div className="navbar-identity navbar-identity-mobile">
-              <span className="navbar-veterinaria">{veterinaria?.nombre}</span>
-              <span className="navbar-usuario">{usuario?.nombre}</span>
+        <>
+          <div className="navbar-mobile-backdrop" onClick={() => setMenuAbierto(false)} />
+          <div className="navbar-mobile-menu">
+            <nav className="navbar-nav navbar-nav-mobile">
+              {NAV_ITEMS.map(({ to, end, label, icon: Icon }) => (
+                <NavLink key={to} to={to} end={end} className={navLinkClass} onClick={() => setMenuAbierto(false)}>
+                  <Icon size={16} />
+                  {label}
+                </NavLink>
+              ))}
+            </nav>
+            <div className="navbar-mobile-footer">
+              <div className="navbar-identity navbar-identity-mobile">
+                <span className="navbar-veterinaria">{veterinaria?.nombre}</span>
+                <span className="navbar-usuario">{usuario?.nombre}</span>
+              </div>
+              <Button variant="secondary" fullWidth onClick={logout}>
+                Cerrar sesión
+              </Button>
             </div>
-            <Button variant="secondary" fullWidth onClick={logout}>
-              Cerrar sesión
-            </Button>
           </div>
-        </div>
+        </>
       )}
     </header>
   );

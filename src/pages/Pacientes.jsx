@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { searchPacientes } from "../api/pacienteApi.js";
 import Button from "../components/Button.jsx";
 import { IconSearch, IconPlus, IconInbox } from "../components/icons.jsx";
 import "./Pacientes.css";
 
 function Pacientes() {
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [pacientes, setPacientes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,9 +75,17 @@ function Pacientes() {
             </thead>
             <tbody>
               {pacientes.map((p) => (
-                <tr key={p.id}>
+                <tr
+                  key={p.id}
+                  className="pacientes-row"
+                  tabIndex={0}
+                  onClick={() => navigate(`/pacientes/${p.id}`)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") navigate(`/pacientes/${p.id}`);
+                  }}
+                >
                   <td data-label="Mascota">
-                    <Link to={`/pacientes/${p.id}`}>{p.nombre}</Link>
+                    <span className="pacientes-nombre">{p.nombre}</span>
                   </td>
                   <td data-label="Especie / Raza">
                     <span className="especie-badge">{p.especie}</span>

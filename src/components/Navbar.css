@@ -123,10 +123,18 @@
     display: inline-flex;
   }
 
+  .navbar-mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    top: 64px;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 40;
+  }
+
   .navbar-mobile-menu {
     display: flex;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     top: 64px;
     left: 0;
     right: 0;
@@ -137,6 +145,7 @@
     box-shadow: var(--shadow-lg);
     padding: var(--space-3);
     gap: var(--space-1);
+    z-index: 41;
   }
 
   .navbar-nav-mobile {

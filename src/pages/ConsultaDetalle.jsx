@@ -176,13 +176,16 @@ function ConsultaDetalle() {
             </Card>
           </div>
 
-          <div className="consulta-detalle-acciones">
-            <Button onClick={() => setModoEdicion(true)}>Editar consulta</Button>
-            <Button variant="danger" onClick={handleEliminar}>
-              <IconTrash size={16} />
-              Eliminar consulta
-            </Button>
+          <div className="mobile-fab">
+            <div className="consulta-detalle-acciones">
+              <Button onClick={() => setModoEdicion(true)}>Editar consulta</Button>
+              <Button variant="danger" onClick={handleEliminar}>
+                <IconTrash size={16} />
+                Eliminar consulta
+              </Button>
+            </div>
           </div>
+          <div className="mobile-fab-spacer" />
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="consulta-form">
@@ -222,14 +225,17 @@ function ConsultaDetalle() {
 
           <FormError>{error}</FormError>
 
-          <div className="consulta-detalle-acciones">
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Guardando..." : "Guardar cambios"}
-            </Button>
-            <Button type="button" variant="secondary" onClick={() => setModoEdicion(false)}>
-              Cancelar
-            </Button>
+          <div className="mobile-fab">
+            <div className="consulta-detalle-acciones">
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Guardando..." : "Guardar cambios"}
+              </Button>
+              <Button type="button" variant="secondary" onClick={() => setModoEdicion(false)}>
+                Cancelar
+              </Button>
+            </div>
           </div>
+          <div className="mobile-fab-spacer" />
         </form>
       )}
     </div>

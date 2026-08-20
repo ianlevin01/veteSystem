@@ -200,10 +200,13 @@ function NuevaConsulta() {
 
         <FormError>{error}</FormError>
 
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Guardando..." : "Guardar consulta"}
-        </Button>
+        <div className="mobile-fab">
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Guardando..." : "Guardar consulta"}
+          </Button>
+        </div>
         <p className="consulta-form-nota">Podés adjuntar imágenes o PDFs después de guardar la consulta.</p>
+        <div className="mobile-fab-spacer" />
       </form>
     </div>
   );

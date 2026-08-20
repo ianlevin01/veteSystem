@@ -11,25 +11,29 @@ import Recordatorios from "./pages/Recordatorios.jsx";
 import Catalogo from "./pages/Catalogo.jsx";
 import ProtectedRoute from "./auth/ProtectedRoute.jsx";
 import AppLayout from "./components/AppLayout.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route element={<ProtectedRoute />}>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/pacientes" element={<Pacientes />} />
-          <Route path="/pacientes/nuevo" element={<NuevoPaciente />} />
-          <Route path="/pacientes/:id" element={<PacienteDetalle />} />
-          <Route path="/pacientes/:id/consultas/nueva" element={<NuevaConsulta />} />
-          <Route path="/pacientes/:id/consultas/:consultaId" element={<ConsultaDetalle />} />
-          <Route path="/recordatorios" element={<Recordatorios />} />
-          <Route path="/catalogo" element={<Catalogo />} />
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/pacientes" element={<Pacientes />} />
+            <Route path="/pacientes/nuevo" element={<NuevoPaciente />} />
+            <Route path="/pacientes/:id" element={<PacienteDetalle />} />
+            <Route path="/pacientes/:id/consultas/nueva" element={<NuevaConsulta />} />
+            <Route path="/pacientes/:id/consultas/:consultaId" element={<ConsultaDetalle />} />
+            <Route path="/recordatorios" element={<Recordatorios />} />
+            <Route path="/catalogo" element={<Catalogo />} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

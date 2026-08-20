@@ -159,6 +159,42 @@ tbody tr:hover {
   display: none;
 }
 
+/* Barra de accion flotante: en desktop no hace nada, en mobile fija el/los
+   boton(es) mas importantes de la pantalla al fondo del viewport para que
+   esten siempre alcanzables sin tener que scrollear hasta el final. */
+.mobile-fab {
+  display: contents;
+}
+
+@media (max-width: 760px) {
+  .mobile-fab {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    position: fixed;
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: var(--space-4);
+    z-index: 30;
+  }
+
+  .mobile-fab .btn {
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .mobile-fab-spacer {
+    display: block;
+    height: 72px;
+  }
+}
+
+@media (min-width: 761px) {
+  .mobile-fab-spacer {
+    display: none;
+  }
+}
+
 .empty-state-rich {
   display: flex;
   flex-direction: column;

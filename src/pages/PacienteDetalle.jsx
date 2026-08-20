@@ -256,12 +256,14 @@ function PacienteDetalle() {
           <Card className="paciente-section">
             <div className="paciente-historial-header">
               <h3>Historial de consultas</h3>
-              <Link to={`/pacientes/${id}/consultas/nueva`}>
-                <Button>
-                  <IconPlus size={16} />
-                  Nueva consulta
-                </Button>
-              </Link>
+              <div className="mobile-fab">
+                <Link to={`/pacientes/${id}/consultas/nueva`}>
+                  <Button>
+                    <IconPlus size={16} />
+                    Nueva consulta
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             <input
@@ -297,6 +299,7 @@ function PacienteDetalle() {
               ))}
             </ul>
           </Card>
+          <div className="mobile-fab-spacer" />
         </div>
       </div>
     </div>
