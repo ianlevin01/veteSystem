@@ -72,7 +72,7 @@ function Navbar() {
         <>
           <div className="navbar-mobile-backdrop" onClick={() => setMenuAbierto(false)} />
           <div className="navbar-mobile-menu">
-            <nav className="navbar-nav navbar-nav-mobile">
+            <nav className="navbar-nav-mobile">
               {NAV_ITEMS.map(({ to, end, label, icon: Icon }) => (
                 <NavLink key={to} to={to} end={end} className={navLinkClass} onClick={() => setMenuAbierto(false)}>
                   <Icon size={16} />
@@ -81,7 +81,7 @@ function Navbar() {
               ))}
             </nav>
             <div className="navbar-mobile-footer">
-              <div className="navbar-identity navbar-identity-mobile">
+              <div className="navbar-identity-mobile">
                 <span className="navbar-veterinaria">{veterinaria?.nombre}</span>
                 <span className="navbar-usuario">{usuario?.nombre}</span>
               </div>
