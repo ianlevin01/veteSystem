@@ -10,16 +10,20 @@ const TIPOS_PERMITIDOS = ["image/jpeg", "image/png", "image/webp", "image/gif", 
 const EXTENSIONES_PERMITIDAS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic", ".heif", ".pdf"];
 const MAX_BYTES = 15 * 1024 * 1024;
 
-// Las fotos sacadas directo con la camara del celular a veces llegan sin un
-// "type" MIME valido (algunos navegadores mandan "" o "application/octet-stream"
-// en ese caso, a diferencia de elegir una foto ya existente de la galeria). En
-// vez de rechazarlas de entrada, si el tipo no es reconocible miramos la
-// extension del nombre de archivo antes de bloquear la subida.
+// Las fotos sacadas directo con la camara del celular a veces llegan con un
+// "type" MIME que no es exactamente el esperado: puede venir vacio,
+// "application/octet-stream", o un alias no estandar como "image/jpg" (varios
+// navegadores Android/Samsung lo informan asi para JPEGs), a diferencia de
+// elegir una foto ya existente de la galeria. Por eso la extension del
+// nombre de archivo es la señal principal, no el "type" reportado - el tipo
+// solo sirve para aceptar rapido cuando coincide exactamente con la lista.
 function tipoValido(file) {
   if (TIPOS_PERMITIDOS.includes(file.type)) return true;
-  if (file.type && file.type !== "application/octet-stream") return false;
   const nombre = (file.name || "").toLowerCase();
-  return EXTENSIONES_PERMITIDAS.some((ext) => nombre.endsWith(ext));
+  if (EXTENSIONES_PERMITIDAS.some((ext) => nombre.endsWith(ext))) return true;
+  // Sin extension reconocible: como ultimo recurso, aceptamos si el tipo
+  // reportado al menos empieza con "image/" (cubre alias no estandar).
+  return Boolean(file.type && file.type.startsWith("image/"));
 }
 
 function formatBytes(bytes) {
@@ -44,12 +48,14 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
     setError(null);
 
     if (!tipoValido(file)) {
-      setError("Solo se permiten imágenes (jpg, png, webp, gif, heic) o PDF");
+      setError(
+        `Solo se permiten imágenes (jpg, png, webp, gif, heic) o PDF (archivo recibido: nombre="${file.name || "sin nombre"}", tipo="${file.type || "vacío"}")`
+      );
       event.target.value = "";
       return;
     }
     if (file.size > MAX_BYTES) {
-      setError("El archivo no puede pesar más de 15MB");
+      setError(`El archivo no puede pesar más de 15MB (este mide ${formatBytes(file.size)})`);
       event.target.value = "";
       return;
     }
