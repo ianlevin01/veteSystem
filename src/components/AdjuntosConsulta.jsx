@@ -65,7 +65,16 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
       const subido = await subirAdjunto(pacienteId, historiaId, file);
       setAdjuntos((prev) => [...prev, subido]);
     } catch (err) {
-      setError(getErrorMessage(err, "No se pudo subir el archivo"));
+      // Diagnostico temporal: si el servidor respondio, mostramos el status y
+      // el cuerpo (aunque no sea JSON, por si un proxy delante de la API
+      // devuelve una pagina de error propia). Si no hubo respuesta, mostramos
+      // el codigo de error del navegador (network error, CORS, timeout, etc).
+      const diagnostico = err.response
+        ? `HTTP ${err.response.status}: ${
+            typeof err.response.data === "string" ? err.response.data : JSON.stringify(err.response.data ?? "")
+          }`.slice(0, 200)
+        : `sin respuesta del servidor (${err.code || "sin código"}: ${err.message})`;
+      setError(`${getErrorMessage(err, "No se pudo subir el archivo")} — ${diagnostico}`);
     } finally {
       setIsUploading(false);
       event.target.value = "";
