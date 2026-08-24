@@ -6,8 +6,21 @@ import { IconPaperclip, IconUpload, IconTrash } from "./icons.jsx";
 import { getErrorMessage } from "../utils/errors.js";
 import "./AdjuntosConsulta.css";
 
-const TIPOS_PERMITIDOS = ["image/jpeg", "image/png", "image/webp", "image/gif", "application/pdf"];
+const TIPOS_PERMITIDOS = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/heic", "image/heif", "application/pdf"];
+const EXTENSIONES_PERMITIDAS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic", ".heif", ".pdf"];
 const MAX_BYTES = 15 * 1024 * 1024;
+
+// Las fotos sacadas directo con la camara del celular a veces llegan sin un
+// "type" MIME valido (algunos navegadores mandan "" o "application/octet-stream"
+// en ese caso, a diferencia de elegir una foto ya existente de la galeria). En
+// vez de rechazarlas de entrada, si el tipo no es reconocible miramos la
+// extension del nombre de archivo antes de bloquear la subida.
+function tipoValido(file) {
+  if (TIPOS_PERMITIDOS.includes(file.type)) return true;
+  if (file.type && file.type !== "application/octet-stream") return false;
+  const nombre = (file.name || "").toLowerCase();
+  return EXTENSIONES_PERMITIDAS.some((ext) => nombre.endsWith(ext));
+}
 
 function formatBytes(bytes) {
   if (!bytes) return "";
@@ -30,8 +43,8 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
     if (!file) return;
     setError(null);
 
-    if (!TIPOS_PERMITIDOS.includes(file.type)) {
-      setError("Solo se permiten imágenes (jpg, png, webp, gif) o PDF");
+    if (!tipoValido(file)) {
+      setError("Solo se permiten imágenes (jpg, png, webp, gif, heic) o PDF");
       event.target.value = "";
       return;
     }
@@ -85,7 +98,7 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
       <input
         ref={inputRef}
         type="file"
-        accept={TIPOS_PERMITIDOS.join(",")}
+        accept="image/*,application/pdf"
         onChange={handleFileChange}
         className="input-oculto"
         id="adjuntos-input"
