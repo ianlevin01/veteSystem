@@ -1,4 +1,4 @@
-.adjuntos-consulta {
+.adjuntos-lista-wrap {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -57,8 +57,7 @@
 }
 
 @media (max-width: 640px) {
-  .adjuntos-consulta .btn {
+  .adjuntos-lista-wrap .btn {
     width: 100%;
   }
 }
-

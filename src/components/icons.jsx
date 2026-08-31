@@ -168,6 +168,15 @@ export function IconInbox({ size = 36, className }) {
   );
 }
 
+export function IconEdit({ size = 16, className }) {
+  return (
+    <svg {...iconProps(size, className)}>
+      <path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3Z" />
+      <path d="m14 6 4 4" />
+    </svg>
+  );
+}
+
 export function IconAlertTriangle({ size = 36, className }) {
   return (
     <svg {...iconProps(size, className)}>

@@ -151,6 +151,57 @@
   text-align: right;
 }
 
+.paciente-datos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.paciente-datos-header h3 {
+  margin: 0;
+}
+
+.paciente-datos-editar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border: none;
+  background: none;
+  color: var(--color-primary-dark);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.paciente-datos-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.paciente-datos-acciones {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.paciente-datos-acciones .btn {
+  flex: 1;
+}
+
+/* Análisis y estudios */
+
+.paciente-analisis-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.paciente-analisis-header h3 {
+  margin: 0;
+}
+
 /* Columna principal */
 
 .paciente-detalle-main {

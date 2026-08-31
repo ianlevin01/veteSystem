@@ -1,10 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { listAdjuntos, subirAdjunto, getUrlDescargaAdjunto, deleteAdjunto } from "../api/adjuntoApi.js";
+import {
+  listAdjuntos,
+  subirAdjunto,
+  listAnalisis,
+  subirAnalisis,
+  getUrlDescargaAdjunto,
+  deleteAdjunto,
+} from "../api/adjuntoApi.js";
 import Button from "./Button.jsx";
 import FormError from "./FormError.jsx";
 import { IconPaperclip, IconUpload, IconTrash } from "./icons.jsx";
 import { getErrorMessage } from "../utils/errors.js";
-import "./AdjuntosConsulta.css";
+import "./AdjuntosLista.css";
 
 const TIPOS_PERMITIDOS = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/heic", "image/heif", "application/pdf"];
 const EXTENSIONES_PERMITIDAS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic", ".heif", ".pdf"];
@@ -21,8 +28,6 @@ function tipoValido(file) {
   if (TIPOS_PERMITIDOS.includes(file.type)) return true;
   const nombre = (file.name || "").toLowerCase();
   if (EXTENSIONES_PERMITIDAS.some((ext) => nombre.endsWith(ext))) return true;
-  // Sin extension reconocible: como ultimo recurso, aceptamos si el tipo
-  // reportado al menos empieza con "image/" (cubre alias no estandar).
   return Boolean(file.type && file.type.startsWith("image/"));
 }
 
@@ -32,14 +37,17 @@ function formatBytes(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-function AdjuntosConsulta({ pacienteId, historiaId }) {
+// pacienteId siempre requerido; historiaId presente = adjuntos de una consulta,
+// ausente = analisis asociados directamente al paciente.
+function AdjuntosLista({ pacienteId, historiaId }) {
   const [adjuntos, setAdjuntos] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    listAdjuntos(pacienteId, historiaId).then(setAdjuntos);
+    const cargar = historiaId ? listAdjuntos(pacienteId, historiaId) : listAnalisis(pacienteId);
+    cargar.then(setAdjuntos);
   }, [pacienteId, historiaId]);
 
   async function handleFileChange(event) {
@@ -62,13 +70,9 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
 
     setIsUploading(true);
     try {
-      const subido = await subirAdjunto(pacienteId, historiaId, file);
+      const subido = historiaId ? await subirAdjunto(pacienteId, historiaId, file) : await subirAnalisis(pacienteId, file);
       setAdjuntos((prev) => [...prev, subido]);
     } catch (err) {
-      // Diagnostico temporal: si el servidor respondio, mostramos el status y
-      // el cuerpo (aunque no sea JSON, por si un proxy delante de la API
-      // devuelve una pagina de error propia). Si no hubo respuesta, mostramos
-      // el codigo de error del navegador (network error, CORS, timeout, etc).
       const diagnostico = err.response
         ? `HTTP ${err.response.status}: ${
             typeof err.response.data === "string" ? err.response.data : JSON.stringify(err.response.data ?? "")
@@ -82,8 +86,22 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
   }
 
   async function handleDescargar(adjuntoId) {
-    const { url } = await getUrlDescargaAdjunto(adjuntoId);
-    window.open(url, "_blank", "noopener,noreferrer");
+    // En mobile (sobre todo iOS Safari) un window.open() llamado despues de
+    // un await ya no cuenta como "gesto del usuario" y el navegador lo
+    // bloquea en silencio. Por eso abrimos la pestaña ANTES del await, y
+    // recien despues le seteamos la url real.
+    const nuevaVentana = window.open("", "_blank");
+    try {
+      const { url } = await getUrlDescargaAdjunto(adjuntoId);
+      if (nuevaVentana) {
+        nuevaVentana.location.href = url;
+      } else {
+        window.location.href = url;
+      }
+    } catch (err) {
+      if (nuevaVentana) nuevaVentana.close();
+      setError(getErrorMessage(err, "No se pudo abrir el archivo"));
+    }
   }
 
   async function handleEliminar(adjuntoId) {
@@ -92,7 +110,7 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
   }
 
   return (
-    <div className="adjuntos-consulta">
+    <div className="adjuntos-lista-wrap">
       {adjuntos.length > 0 && (
         <ul className="adjuntos-lista">
           {adjuntos.map((a) => (
@@ -116,7 +134,7 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
         accept="image/*,application/pdf"
         onChange={handleFileChange}
         className="input-oculto"
-        id="adjuntos-input"
+        id={`adjuntos-input-${historiaId || pacienteId}`}
       />
       <Button type="button" variant="secondary" disabled={isUploading} onClick={() => inputRef.current?.click()}>
         <IconUpload size={16} />
@@ -127,4 +145,4 @@ function AdjuntosConsulta({ pacienteId, historiaId }) {
   );
 }
 
-export default AdjuntosConsulta;
+export default AdjuntosLista;

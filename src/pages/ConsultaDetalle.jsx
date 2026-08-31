@@ -6,7 +6,7 @@ import TextField from "../components/TextField.jsx";
 import Button from "../components/Button.jsx";
 import FormError from "../components/FormError.jsx";
 import ConsultaItemsPicker from "../components/ConsultaItemsPicker.jsx";
-import AdjuntosConsulta from "../components/AdjuntosConsulta.jsx";
+import AdjuntosLista from "../components/AdjuntosLista.jsx";
 import { IconArrowLeft, IconSyringe, IconTrash } from "../components/icons.jsx";
 import { formatDate, formatPlazo } from "../utils/format.js";
 import { getErrorMessage } from "../utils/errors.js";
@@ -116,7 +116,7 @@ function ConsultaDetalle() {
       <div className="consulta-form">
         <Card className="consulta-form-card">
           <h3>Archivos adjuntos</h3>
-          <AdjuntosConsulta pacienteId={pacienteId} historiaId={consultaId} />
+          <AdjuntosLista pacienteId={pacienteId} historiaId={consultaId} />
         </Card>
       </div>
 

@@ -12,6 +12,18 @@ export async function subirAdjunto(pacienteId, historiaId, file) {
   return data;
 }
 
+export async function listAnalisis(pacienteId) {
+  const { data } = await axiosClient.get(`/api/pacientes/${pacienteId}/analisis`);
+  return data;
+}
+
+export async function subirAnalisis(pacienteId, file) {
+  const formData = new FormData();
+  formData.append("archivo", file);
+  const { data } = await axiosClient.post(`/api/pacientes/${pacienteId}/analisis`, formData);
+  return data;
+}
+
 export async function getUrlDescargaAdjunto(adjuntoId) {
   const { data } = await axiosClient.get(`/api/adjuntos/${adjuntoId}/url`);
   return data;
