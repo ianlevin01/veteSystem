@@ -30,7 +30,18 @@ export function AuthProvider({ children }) {
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
+        const esLlamadaDeRefresh = originalRequest?.url?.includes("/api/auth/refresh");
         const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+
+        // Si la que falla con 401 es la propia llamada de refresh (token
+        // guardado invalido/vencido/de una version vieja del backend), no hay
+        // que reintentar refrescar de nuevo - eso reintentaria para siempre
+        // con el mismo token invalido, en un loop infinito que nunca llega a
+        // limpiar la sesion.
+        if (error.response?.status === 401 && esLlamadaDeRefresh) {
+          clearSession();
+          return Promise.reject(error);
+        }
 
         if (error.response?.status === 401 && !originalRequest._retry && storedRefreshToken) {
           originalRequest._retry = true;
