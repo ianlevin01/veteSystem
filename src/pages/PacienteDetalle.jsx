@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getPaciente, updatePaciente } from "../api/pacienteApi.js";
+import { updateDuenio } from "../api/duenioApi.js";
 import { listHistorias } from "../api/historiaClinicaApi.js";
 import { listAlertasPaciente, createAlertaPaciente, updateAlerta, deleteAlerta } from "../api/alertaApi.js";
 import { listRecordatoriosPaciente } from "../api/recordatorioApi.js";
@@ -51,11 +52,50 @@ function pacienteAForm(paciente) {
   };
 }
 
+function duenioAForm(duenio) {
+  return {
+    nombre: duenio.nombre || "",
+    telefono: duenio.telefono || "",
+    email: duenio.email || "",
+    direccion: duenio.direccion || "",
+  };
+}
+
 function DatosPacienteCard({ paciente, onActualizado }) {
   const [editando, setEditando] = useState(false);
   const [form, setForm] = useState(() => pacienteAForm(paciente));
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [editandoDuenio, setEditandoDuenio] = useState(false);
+  const [duenioForm, setDuenioForm] = useState(() => duenioAForm(paciente.duenio));
+  const [duenioError, setDuenioError] = useState(null);
+  const [isDuenioSubmitting, setIsDuenioSubmitting] = useState(false);
+
+  function updateDuenioField(field) {
+    return (event) => setDuenioForm((prev) => ({ ...prev, [field]: event.target.value }));
+  }
+
+  function handleEditarDuenio() {
+    setDuenioForm(duenioAForm(paciente.duenio));
+    setDuenioError(null);
+    setEditandoDuenio(true);
+  }
+
+  async function handleGuardarDuenio(event) {
+    event.preventDefault();
+    setDuenioError(null);
+    setIsDuenioSubmitting(true);
+    try {
+      const duenioActualizado = await updateDuenio(paciente.duenio.id, duenioForm);
+      onActualizado({ ...paciente, duenio: { ...paciente.duenio, ...duenioActualizado } });
+      setEditandoDuenio(false);
+    } catch (err) {
+      setDuenioError(getErrorMessage(err, "No se pudo actualizar el dueño"));
+    } finally {
+      setIsDuenioSubmitting(false);
+    }
+  }
 
   function updateField(field) {
     return (event) => {
@@ -172,25 +212,54 @@ function DatosPacienteCard({ paciente, onActualizado }) {
         </dl>
       )}
 
-      <h3>Dueño</h3>
-      <dl>
-        <div>
-          <dt>Nombre</dt>
-          <dd>{paciente.duenio.nombre}</dd>
-        </div>
-        <div>
-          <dt>Teléfono</dt>
-          <dd>{paciente.duenio.telefono || "-"}</dd>
-        </div>
-        <div>
-          <dt>Email</dt>
-          <dd>{paciente.duenio.email || "-"}</dd>
-        </div>
-        <div>
-          <dt>Dirección</dt>
-          <dd>{paciente.duenio.direccion || "-"}</dd>
-        </div>
-      </dl>
+      <div className="paciente-datos-header">
+        <h3>Dueño</h3>
+        {!editandoDuenio && (
+          <button type="button" className="paciente-datos-editar" onClick={handleEditarDuenio}>
+            <IconEdit size={14} />
+            Editar
+          </button>
+        )}
+      </div>
+
+      {editandoDuenio ? (
+        <form onSubmit={handleGuardarDuenio} className="paciente-datos-form">
+          <TextField id="edit-duenio-nombre" label="Nombre" required value={duenioForm.nombre} onChange={updateDuenioField("nombre")} />
+          <TextField id="edit-duenio-telefono" label="Teléfono" value={duenioForm.telefono} onChange={updateDuenioField("telefono")} />
+          <TextField id="edit-duenio-email" label="Email" type="email" value={duenioForm.email} onChange={updateDuenioField("email")} />
+          <TextField id="edit-duenio-direccion" label="Dirección" value={duenioForm.direccion} onChange={updateDuenioField("direccion")} />
+
+          <FormError>{duenioError}</FormError>
+
+          <div className="paciente-datos-acciones">
+            <Button type="submit" disabled={isDuenioSubmitting}>
+              {isDuenioSubmitting ? "Guardando..." : "Guardar cambios"}
+            </Button>
+            <Button type="button" variant="secondary" onClick={() => setEditandoDuenio(false)} disabled={isDuenioSubmitting}>
+              Cancelar
+            </Button>
+          </div>
+        </form>
+      ) : (
+        <dl>
+          <div>
+            <dt>Nombre</dt>
+            <dd>{paciente.duenio.nombre}</dd>
+          </div>
+          <div>
+            <dt>Teléfono</dt>
+            <dd>{paciente.duenio.telefono || "-"}</dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd>{paciente.duenio.email || "-"}</dd>
+          </div>
+          <div>
+            <dt>Dirección</dt>
+            <dd>{paciente.duenio.direccion || "-"}</dd>
+          </div>
+        </dl>
+      )}
     </Card>
   );
 }
